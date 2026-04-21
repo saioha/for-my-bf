@@ -34,7 +34,6 @@
             z-index: 1;
         }
 
-        /* Глобальный плеер лапка */
         .global-player {
             position: fixed;
             bottom: 30px;
@@ -63,7 +62,6 @@
         .song-name { font-size: 13px; font-weight: 500; background: rgba(255,255,255,0.12); padding: 5px 12px; border-radius: 40px; }
         .play-pause-text { font-size: 22px; font-weight: 600; min-width: 36px; text-align: center; }
 
-        /* Навигация */
         .nav-links {
             position: fixed;
             top: 18px;
@@ -103,7 +101,6 @@
         .page.active { display: block; }
         @keyframes fadePage { from { opacity: 0; transform: translateY(12px);} to { opacity: 1; transform: translateY(0);} }
 
-        /* Винил */
         .vinyl-hero {
             display: flex;
             flex-direction: column;
@@ -139,7 +136,6 @@
         }
         .cat-gif-bottom video { width: 100%; height: 100%; object-fit: cover; border-radius: 30px; }
 
-        /* Вселенные грид */
         .universes-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -159,7 +155,6 @@
         .universe-title { margin-top: 14px; font-weight: 600; text-align: center; font-size: 1rem; }
         .movie-quote { font-size: 0.75rem; text-align: center; margin-top: 8px; opacity: 0.8; font-style: italic; color: #ffdd99; }
 
-        /* центральный видос снизу — ИСПРАВЛЕННЫЕ закруглённые края */
         .center-video-wrapper {
             display: flex;
             justify-content: center;
@@ -185,7 +180,6 @@
         }
         .center-quote { margin-top: 12px; font-size: 1rem; font-weight: 500; color: #ffec80; }
 
-        /* Страница Хоккинга (3D + счётчик) */
         .hawking-page {
             text-align: center;
         }
@@ -264,7 +258,7 @@
             border-radius: 28px;
         }
 
-        /* Полноэкранное письмо */
+        /* РОЗОВЫЙ КОНВЕРТ */
         .envelope-area {
             display: flex;
             justify-content: center;
@@ -275,26 +269,33 @@
         .envelope {
             width: 320px;
             height: 210px;
-            background: #e3c9a0;
+            background: #f5a0b8;
             position: relative;
             border-radius: 12px;
             cursor: pointer;
             transition: 0.3s;
-            box-shadow: 0 15px 30px black;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         }
         .envelope-flap {
             position: absolute;
             top: 0;
             width: 100%;
             height: 100%;
-            background: #d4b17c;
+            background: #e887a3;
             clip-path: polygon(0 0, 50% 48%, 100% 0);
             transition: transform 0.5s ease;
             transform-origin: top;
             z-index: 2;
         }
         .envelope.open .envelope-flap { transform: rotateX(180deg); }
-        .envelope-body { position: absolute; bottom: 0; width: 100%; height: 72%; background: #f7e5c2; border-radius: 0 0 12px 12px; }
+        .envelope-body { 
+            position: absolute; 
+            bottom: 0; 
+            width: 100%; 
+            height: 72%; 
+            background: #ffb8ce; 
+            border-radius: 0 0 12px 12px; 
+        }
         .fullscreen-letter {
             position: fixed;
             top: 0;
@@ -383,7 +384,6 @@
     </video>
 </div>
 
-<!-- СТРАНИЦА 1: ВИНИЛ -->
 <div id="vinylPage" class="page active">
     <div class="vinyl-hero">
         <div class="vinyl-record-img" id="bigVinylRecord"></div>
@@ -392,14 +392,12 @@
     </div>
 </div>
 
-<!-- СТРАНИЦА 2: 5 ВСЕЛЕННЫХ -->
 <div id="universesPage" class="page">
     <h2 style="text-align: center; margin-bottom: 20px; font-weight: 400;">🌀 параллельные миры без тебя</h2>
     <div class="universes-grid" id="videosGrid"></div>
     <div class="center-video-wrapper" id="centerVideoContainer"></div>
 </div>
 
-<!-- СТРАНИЦА 3: ЧЕРВОТОЧИНА ХОККИНГА + 3D ГАЛАКТИКА + СЧЁТЧИК -->
 <div id="hawkingPage" class="page">
     <div class="hawking-page">
         <div id="galaxy-container"></div>
@@ -430,7 +428,6 @@
     </div>
 </div>
 
-<!-- СТРАНИЦА 4: КОНВЕРТ -->
 <div id="letterPage" class="page">
     <div class="envelope-area">
         <div class="envelope" id="envelope">
@@ -441,7 +438,6 @@
     </div>
 </div>
 
-<!-- ПОЛНОЭКРАННОЕ ПИСЬМО -->
 <div id="fullscreenLetter" class="fullscreen-letter">
     <button class="close-letter" id="closeLetterBtn">✕</button>
     <div class="letter-full-content" id="poemFullContent"></div>
@@ -451,7 +447,6 @@
     <source src="https://github.com/saioha/GIFs-/raw/refs/heads/main/Sweater-Weather-The-Neighbourhood.mp3" type="audio/mpeg">
 </audio>
 
-<!-- Three.js библиотека для 3D галактики -->
 <script type="importmap">
     {
         "imports": {
@@ -463,7 +458,6 @@
 <script type="module">
     import * as THREE from 'three';
 
-    // ========= 3D ГАЛАКТИКА =========
     const container = document.getElementById('galaxy-container');
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x020210);
@@ -477,7 +471,7 @@
     renderer.setPixelRatio(window.devicePixelRatio);
     container.appendChild(renderer.domElement);
     
-    // Звёздный фон (частицы)
+    // Звёздный фон
     const starGeometry = new THREE.BufferGeometry();
     const starCount = 1500;
     const starPositions = new Float32Array(starCount * 3);
@@ -519,17 +513,47 @@
     const galaxy = new THREE.Points(galaxyGeometry, galaxyMaterial);
     scene.add(galaxy);
     
-    // Центральное свечение (ядро)
-    const coreGeometry = new THREE.SphereGeometry(0.35, 16, 16);
-    const coreMaterial = new THREE.MeshStandardMaterial({ color: 0xffaa66, emissive: 0xff4422, emissiveIntensity: 0.8 });
-    const core = new THREE.Mesh(coreGeometry, coreMaterial);
-    scene.add(core);
+    // ЯДРО В ВИДЕ СЕРДЦА!
+    const heartShape = new THREE.Shape();
+    heartShape.moveTo(0, 0.25);
+    heartShape.bezierCurveTo(0, 0.25, 0, 0, 0.15, 0);
+    heartShape.bezierCurveTo(0.3, 0, 0.35, 0.25, 0.2, 0.4);
+    heartShape.bezierCurveTo(0.1, 0.5, 0, 0.6, 0, 0.7);
+    heartShape.bezierCurveTo(0, 0.6, -0.1, 0.5, -0.2, 0.4);
+    heartShape.bezierCurveTo(-0.35, 0.25, -0.3, 0, -0.15, 0);
+    heartShape.bezierCurveTo(0, 0, 0, 0.25, 0, 0.25);
+    
+    const heartGeometry = new THREE.ExtrudeGeometry(heartShape, {
+        depth: 0.1,
+        bevelEnabled: true,
+        bevelSegments: 2,
+        bevelThickness: 0.05,
+        bevelSize: 0.05
+    });
+    heartGeometry.computeBoundingBox();
+    heartGeometry.center();
+    heartGeometry.scale(0.4, 0.4, 0.2);
+    
+    const heartMaterial = new THREE.MeshStandardMaterial({ color: 0xff3366, emissive: 0xff1144, emissiveIntensity: 0.9, metalness: 0.3, roughness: 0.2 });
+    const heartCore = new THREE.Mesh(heartGeometry, heartMaterial);
+    heartCore.position.set(0, 0, 0);
+    scene.add(heartCore);
+    
+    // Свечение вокруг сердца
+    const glowGeometry = new THREE.SphereGeometry(0.5, 16, 16);
+    const glowMaterial = new THREE.MeshBasicMaterial({ color: 0xff3366, transparent: true, opacity: 0.15 });
+    const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+    scene.add(glow);
     
     const ambientLight = new THREE.AmbientLight(0x222222);
     scene.add(ambientLight);
-    const pointLight = new THREE.PointLight(0xffaa66, 1, 20);
-    pointLight.position.set(1, 1, 2);
+    const pointLight = new THREE.PointLight(0xff6688, 1.2, 15);
+    pointLight.position.set(0, 0.5, 1);
     scene.add(pointLight);
+    
+    const backLight = new THREE.PointLight(0xff88aa, 0.5);
+    backLight.position.set(0, -0.5, -1.5);
+    scene.add(backLight);
     
     let time = 0;
     function animateGalaxy() {
@@ -538,7 +562,9 @@
         galaxy.rotation.y = time * 0.8;
         starsField.rotation.y = time * 0.05;
         starsField.rotation.x = Math.sin(time * 0.1) * 0.1;
-        core.rotation.x = time * 0.5;
+        heartCore.rotation.z = Math.sin(time * 1.5) * 0.1;
+        heartCore.rotation.x = Math.sin(time * 1.2) * 0.1;
+        glow.scale.setScalar(1 + Math.sin(time * 3) * 0.05);
         renderer.render(scene, camera);
     }
     animateGalaxy();
@@ -553,7 +579,6 @@
 </script>
 
 <script>
-    // ========= ПОЛНЫЙ СТИХ =========
     const FULL_POEM = `Прости за глупости, что наговорила,
 за резкость, что вышла случайно.
 Я так не думаю, правда, поверь —
@@ -614,16 +639,15 @@
 Потому что всё, что у нас есть сейчас, —
 слишком живое, чтобы стать прошлым.`;
 
-    // ========= 5 ВИДЕО + КИНОЦИТАТЫ =========
+    // ВИДЕО — заменил третье видео (Вселенная Стивена Хокинга)
     const videosData = [
         { title: "10 причин моей ненависти к тебе", quote: "«Я ненавижу тебя настолько, что готова любить вечность»", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/5F9D3EE4-6622-450D-B492-A4C40DE22DA8-ezgif.com-gif-to-mp4-converter.mp4" },
         { title: "Из 13 в 30", quote: "«Тридцать — это не старость, это время найти настоящую любовь»", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/4F9B18C5-3104-4044-BC51-FE65244121B5-ezgif.com-gif-to-mp4-converter.mp4" },
-        { title: "Вселенная Стивена Хокинга", quote: "«Мы всего лишь частица во Вселенной, но для друг друга — целый мир»", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/4028BD33-1752-4F18-9C9D-8969ABD02A5C-ezgif.com-gif-to-mp4-converter.mp4" },
+        { title: "Вселенная Стивена Хокинга", quote: "«Мы всего лишь частица во Вселенной, но для друг друга — целый мир»", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/C3EB9465-CE10-4380-8EDF-B1A5E04A4D47.mp4" },  // НОВОЕ ВИДЕО
         { title: "До встречи с тобой", quote: "«Ты единственный, кто заставил меня чувствовать себя живым»", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/2691FB63-EDCE-4FEA-9FF6-55E896B92298-ezgif.com-gif-to-mp4-converter.mp4" },
         { title: "Дневник памяти", quote: "«Любовь — это когда мы вместе, даже если ничего не помним»", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/07922ED7-1077-4810-874E-B26A53D5CE92-ezgif.com-gif-to-mp4-converter.mp4" }
     ];
 
-    // отрисовка 4 карточек в грид, а 5-ю в центр
     const gridContainer = document.getElementById('videosGrid');
     const centerContainer = document.getElementById('centerVideoContainer');
     
@@ -668,9 +692,8 @@
         }
     });
 
-    // ========= СЧЁТЧИК ДО ВСТРЕЧИ (10 июля 2026, МСК) =========
     function updateCountdown() {
-        const targetDate = new Date(2026, 6, 10, 0, 0, 0); // 10 июля 2026, 00:00 МСК
+        const targetDate = new Date(2026, 6, 10, 0, 0, 0);
         const now = new Date();
         const diff = targetDate - now;
         
@@ -695,7 +718,6 @@
     updateCountdown();
     setInterval(updateCountdown, 1000);
 
-    // ========= АУДИОПЛЕЕР, ВИНИЛ, ЛАПКА =========
     const audio = document.getElementById('globalAudio');
     audio.load();
     const playPausePaw = document.getElementById('playPausePaw');
@@ -729,7 +751,6 @@
     audio.addEventListener('play', () => { isPlaying = true; playPauseText.innerText = '⏸'; bigVinyl.classList.add('playing'); });
     audio.addEventListener('pause', () => { isPlaying = false; playPauseText.innerText = '▶'; bigVinyl.classList.remove('playing'); });
 
-    // ========= НАВИГАЦИЯ =========
     const pages = {
         vinyl: document.getElementById('vinylPage'),
         universes: document.getElementById('universesPage'),
@@ -747,7 +768,6 @@
     }
     navBtns.forEach(btn => btn.addEventListener('click', () => showPage(btn.dataset.page)));
 
-    // ========= ПОЛНОЭКРАННОЕ ПИСЬМО =========
     const envelope = document.getElementById('envelope');
     const fullscreenDiv = document.getElementById('fullscreenLetter');
     const poemFull = document.getElementById('poemFullContent');
@@ -764,7 +784,6 @@
         if(e.target === fullscreenDiv) fullscreenDiv.classList.remove('show');
     });
 
-    // ========= СТРАНИЦА ХОККИНГА: ИНТЕРАКТИВ =========
     const quotesHawking = [
         "«Мы всего лишь продвинутые обезьяны на маленькой планете. Но мы способны понять Вселенную. Это делает нас особенными»",
         "«Помните: смотрите на звёзды, а не себе под ноги. Постарайтесь осмыслить то, что вы видите, и задайтесь вопросом о том, что заставляет Вселенную существовать»",
@@ -790,7 +809,6 @@
         cosmicFactDiv.innerText = facts[factIndex];
     });
 
-    // ========= ПАДАЮЩИЕ ЗВЕЗДЫ (Canvas 2D) =========
     const canvas = document.getElementById('stars-canvas');
     let ctx = canvas.getContext('2d');
     let width, height;
