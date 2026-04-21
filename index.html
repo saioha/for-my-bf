@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-    <title>Встретимся дома ✨</title>
+    <title>Встретимся дома ✨ Космос нашей любви</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -17,14 +17,13 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(145deg, #0a0a2a 0%, #0a0a1a 100%);
+            background: radial-gradient(ellipse at 30% 40%, #0a0a2a, #02020f);
             color: #fff;
             overflow-x: hidden;
             min-height: 100vh;
             position: relative;
         }
 
-        /* Canvas для падающих звёзд */
         #stars-canvas {
             position: fixed;
             top: 0;
@@ -35,72 +34,64 @@
             z-index: 1;
         }
 
-        /* Глобальный плеер (лапка) */
+        /* Глобальный плеер лапка */
         .global-player {
             position: fixed;
             bottom: 30px;
             right: 30px;
             z-index: 1000;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0,0,0,0.7);
             backdrop-filter: blur(16px);
             border-radius: 60px;
-            padding: 8px 16px 8px 12px;
+            padding: 8px 18px 8px 12px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            border: 1px solid rgba(255,255,255,0.25);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+            gap: 12px;
+            border: 1px solid rgba(255,215,0,0.3);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
             cursor: pointer;
-            transition: 0.2s;
         }
-        .global-player:hover { background: rgba(0,0,0,0.85); transform: scale(1.02);}
         .cat-paw-btn {
-            width: 44px;
-            height: 44px;
+            width: 48px;
+            height: 48px;
             background-image: url('https://github.com/saioha/GIFs-/raw/refs/heads/main/IMG_4774.png');
             background-size: contain;
             background-repeat: no-repeat;
-            background-position: center;
             filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));
             cursor: pointer;
-            transition: 0.1s transform;
         }
-        .cat-paw-btn:active { transform: scale(0.92); }
-        .song-name { font-size: 13px; font-weight: 400; letter-spacing: 0.3px; background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 40px; }
-        .play-pause-text { font-size: 20px; font-weight: 600; min-width: 32px; text-align: center; }
+        .song-name { font-size: 13px; font-weight: 500; background: rgba(255,255,255,0.12); padding: 5px 12px; border-radius: 40px; }
+        .play-pause-text { font-size: 22px; font-weight: 600; min-width: 36px; text-align: center; }
 
         /* Навигация */
         .nav-links {
             position: fixed;
-            top: 20px;
+            top: 18px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 16px;
+            gap: 12px;
             z-index: 999;
-            background: rgba(10,10,30,0.7);
+            background: rgba(0,0,0,0.65);
             backdrop-filter: blur(20px);
-            padding: 10px 24px;
+            padding: 8px 20px;
             border-radius: 60px;
-            border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,215,150,0.4);
         }
         .nav-btn {
             background: none;
             border: none;
             color: #eee;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             cursor: pointer;
-            padding: 6px 18px;
+            padding: 6px 16px;
             border-radius: 40px;
             transition: 0.2s;
             font-family: 'Inter', sans-serif;
         }
-        .nav-btn.active { background: rgba(255,215,150,0.25); color: #ffecb3; box-shadow: 0 0 10px rgba(255,200,100,0.3); }
-        .nav-btn:hover { background: rgba(255,255,255,0.1); }
+        .nav-btn.active { background: rgba(255,200,100,0.3); color: #ffecb3; box-shadow: 0 0 12px rgba(255,180,50,0.4); }
 
-        /* Страницы */
         .page {
             display: none;
             padding: 110px 20px 90px;
@@ -110,9 +101,9 @@
             animation: fadePage 0.4s ease;
         }
         .page.active { display: block; }
-        @keyframes fadePage { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: translateY(0);} }
+        @keyframes fadePage { from { opacity: 0; transform: translateY(12px);} to { opacity: 1; transform: translateY(0);} }
 
-        /* Винил главная */
+        /* Винил */
         .vinyl-hero {
             display: flex;
             flex-direction: column;
@@ -128,14 +119,15 @@
             background-size: cover;
             background-position: center;
             border-radius: 50%;
-            box-shadow: 0 25px 40px rgba(0,0,0,0.5), 0 0 0 6px rgba(255,255,200,0.2);
+            box-shadow: 0 25px 40px rgba(0,0,0,0.6), 0 0 0 6px rgba(255,215,150,0.3);
             animation: spinVinyl 8s linear infinite;
             animation-play-state: paused;
             margin-bottom: 30px;
         }
         .vinyl-record-img.playing { animation-play-state: running; }
         @keyframes spinVinyl { 100% { transform: rotate(360deg); } }
-        .greeting { font-size: 2.2rem; font-family: 'Playfair Display', serif; margin: 20px 0 10px; background: linear-gradient(135deg, #ffe6c7, #ffb7c5); -webkit-background-clip: text; background-clip: text; color: transparent;}
+        .greeting { font-size: 2.2rem; font-family: 'Playfair Display', serif; background: linear-gradient(135deg, #ffe6c7, #ffb7c5); -webkit-background-clip: text; background-clip: text; color: transparent;}
+
         .cat-gif-bottom {
             position: fixed;
             bottom: 20px;
@@ -144,60 +136,152 @@
             height: 80px;
             z-index: 100;
             pointer-events: none;
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
         }
-        .cat-gif-bottom video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 30px;
-        }
+        .cat-gif-bottom video { width: 100%; height: 100%; object-fit: cover; border-radius: 30px; }
 
         /* Вселенные грид */
         .universes-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 28px;
             max-width: 1300px;
-            margin: 0 auto;
+            margin: 0 auto 50px auto;
         }
         .universe-card {
-            background: rgba(25,25,55,0.6);
+            background: rgba(15,15,45,0.7);
             backdrop-filter: blur(10px);
-            border-radius: 36px;
-            padding: 14px;
+            border-radius: 32px;
+            padding: 16px;
             border: 1px solid rgba(255,255,255,0.2);
-            transition: 0.25s ease;
+            transition: 0.3s;
         }
-        .universe-card video {
-            width: 100%;
-            border-radius: 28px;
-            aspect-ratio: 16 / 9;
-            object-fit: cover;
-            background: #000;
-        }
-        .universe-title { margin-top: 14px; font-weight: 500; text-align: center; font-size: 0.9rem; letter-spacing: -0.2px; }
+        .universe-card video { width: 100%; border-radius: 24px; aspect-ratio: 16/9; object-fit: cover; background: #000; }
+        .universe-title { margin-top: 14px; font-weight: 600; text-align: center; font-size: 1rem; }
+        .movie-quote { font-size: 0.75rem; text-align: center; margin-top: 8px; opacity: 0.8; font-style: italic; color: #ffdd99; }
 
-        /* Конверт со стихом */
+        /* центральный видос снизу — ИСПРАВЛЕННЫЕ закруглённые края */
+        .center-video-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-top: 60px;
+            margin-bottom: 40px;
+        }
+        .center-universe-card {
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(12px);
+            border-radius: 48px;
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            border: 2px solid rgba(255,215,0,0.6);
+        }
+        .center-universe-card video { 
+            width: 100%; 
+            border-radius: 32px; 
+            aspect-ratio: 16/9; 
+            object-fit: cover;
+            display: block;
+        }
+        .center-quote { margin-top: 12px; font-size: 1rem; font-weight: 500; color: #ffec80; }
+
+        /* Страница Хоккинга (3D + счётчик) */
+        .hawking-page {
+            text-align: center;
+        }
+        #galaxy-container {
+            width: 100%;
+            height: 320px;
+            border-radius: 48px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            background: #000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .wormhole-card {
+            background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(16px);
+            border-radius: 48px;
+            padding: 28px;
+            margin: 20px auto;
+            max-width: 900px;
+            border: 1px solid rgba(100,200,255,0.4);
+        }
+        .hawking-quote {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.2rem;
+            color: #aaffdd;
+            margin: 20px 0;
+            line-height: 1.4;
+        }
+        .countdown-timer {
+            background: rgba(0,0,0,0.7);
+            padding: 20px;
+            border-radius: 48px;
+            margin: 20px 0;
+            font-family: 'Space Mono', monospace;
+        }
+        .timer-digits {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        .timer-block {
+            background: #1a1a3a;
+            padding: 12px 18px;
+            border-radius: 24px;
+            min-width: 80px;
+        }
+        .timer-number {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #ffdd88;
+        }
+        .timer-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .time-travel-btn {
+            background: linear-gradient(135deg, #2a2a6e, #0a0a3a);
+            border: 1px solid #6a6aff;
+            padding: 14px 28px;
+            border-radius: 60px;
+            color: white;
+            font-weight: bold;
+            margin-top: 25px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .time-travel-btn:active { transform: scale(0.96); background: #3a3a8e; }
+        .cosmic-fact {
+            margin-top: 35px;
+            font-size: 0.9rem;
+            background: rgba(255,255,255,0.1);
+            padding: 18px;
+            border-radius: 28px;
+        }
+
+        /* Полноэкранное письмо */
         .envelope-area {
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 70vh;
+            min-height: 65vh;
             flex-direction: column;
         }
         .envelope {
-            width: 340px;
-            height: 230px;
+            width: 320px;
+            height: 210px;
             background: #e3c9a0;
             position: relative;
             border-radius: 12px;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.2);
-            box-shadow: 0 20px 30px -8px black;
-            margin-bottom: 20px;
+            transition: 0.3s;
+            box-shadow: 0 15px 30px black;
         }
-        .envelope:hover { transform: translateY(-6px); }
         .envelope-flap {
             position: absolute;
             top: 0;
@@ -211,47 +295,67 @@
         }
         .envelope.open .envelope-flap { transform: rotateX(180deg); }
         .envelope-body { position: absolute; bottom: 0; width: 100%; height: 72%; background: #f7e5c2; border-radius: 0 0 12px 12px; }
-        .letter {
-            position: absolute;
-            bottom: 20px;
-            left: 18px;
-            right: 18px;
-            background: #fffef7;
-            padding: 20px;
-            border-radius: 20px;
-            color: #2c2b28;
-            font-family: 'Playfair Display', serif;
-            font-size: 14px;
-            line-height: 1.5;
+        .fullscreen-letter {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.96);
+            backdrop-filter: blur(20px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             opacity: 0;
-            transform: translateY(25px);
-            transition: 0.45s;
-            pointer-events: none;
-            box-shadow: 0 12px 28px rgba(0,0,0,0.2);
-            max-height: 65vh;
+            visibility: hidden;
+            transition: 0.4s;
+            padding: 30px;
             overflow-y: auto;
-            text-align: left;
         }
-        .envelope.open .letter { opacity: 1; transform: translateY(-10px); pointer-events: auto; }
-        .poem-text { white-space: pre-line; font-style: normal; font-weight: 400; }
+        .fullscreen-letter.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .letter-full-content {
+            background: #fffef7;
+            color: #1e1a2f;
+            max-width: 700px;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 40px 32px;
+            border-radius: 48px;
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            line-height: 1.65;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.5);
+            white-space: pre-line;
+        }
+        .close-letter {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: white;
+            border: none;
+            font-size: 28px;
+            width: 48px;
+            height: 48px;
+            border-radius: 60px;
+            cursor: pointer;
+            font-weight: bold;
+        }
 
         @media (max-width: 700px) {
-            .vinyl-record-img { width: 220px; height: 220px; }
-            .greeting { font-size: 1.7rem; }
-            .nav-links { gap: 8px; padding: 8px 18px; top: 12px; }
-            .nav-btn { font-size: 12px; padding: 4px 14px; }
-            .universe-card { padding: 10px; }
-            .envelope { width: 280px; height: 200px; }
-            .letter { font-size: 12px; padding: 16px; }
-        }
-
-        /* Адаптация под айфоны с челкой */
-        @supports (padding-top: constant(safe-area-inset-top)) {
-            .nav-links { top: max(20px, constant(safe-area-inset-top)); }
-            .page { padding-top: max(110px, constant(safe-area-inset-top) + 20px); }
+            .vinyl-record-img { width: 210px; height: 210px; }
+            .greeting { font-size: 1.6rem; }
+            .nav-links { gap: 6px; padding: 6px 14px; top: 12px; }
+            .nav-btn { font-size: 11px; padding: 4px 12px; }
+            .letter-full-content { font-size: 14px; padding: 28px 24px; }
+            .center-universe-card { width: 95%; }
+            .timer-block { padding: 8px 12px; min-width: 60px; }
+            .timer-number { font-size: 1.5rem; }
         }
         @supports (padding-top: env(safe-area-inset-top)) {
-            .nav-links { top: max(20px, env(safe-area-inset-top)); }
             .page { padding-top: max(110px, env(safe-area-inset-top) + 20px); }
         }
     </style>
@@ -260,20 +364,19 @@
 
 <canvas id="stars-canvas"></canvas>
 
-<!-- Глобальная кнопка-лапка + плеер -->
 <div class="global-player" id="globalPlayer">
     <div class="cat-paw-btn" id="playPausePaw"></div>
-    <span class="song-name">🧶 sweater weather</span>
+    <span class="song-name">🧣 sweater weather</span>
     <span class="play-pause-text" id="playPauseText">▶</span>
 </div>
 
 <div class="nav-links">
     <button class="nav-btn" data-page="vinyl">💿 Винил</button>
-    <button class="nav-btn" data-page="universes">🌌 Разные вселенные</button>
+    <button class="nav-btn" data-page="universes">🌌 Вселенные</button>
+    <button class="nav-btn" data-page="hawking">🕳️ Червоточина</button>
     <button class="nav-btn" data-page="letter">✉️ Письмо</button>
 </div>
 
-<!-- гифка котика снизу (всегда видна) -->
 <div class="cat-gif-bottom">
     <video autoplay loop muted playsinline>
         <source src="https://github.com/saioha/GIFs-/raw/refs/heads/main/IMG_4769-ezgif.com-gif-to-mp4-converter.mp4" type="video/mp4">
@@ -285,39 +388,173 @@
     <div class="vinyl-hero">
         <div class="vinyl-record-img" id="bigVinylRecord"></div>
         <h1 class="greeting">✨ Встретимся дома ✨</h1>
-        <p style="opacity: 0.7; margin-top: 10px;">наша пластинка играет для нас</p>
+        <p style="opacity: 0.7;">наша пластинка — космический саундтрек</p>
     </div>
 </div>
 
-<!-- СТРАНИЦА 2: 5 ВСЕЛЕННЫХ (видео) -->
+<!-- СТРАНИЦА 2: 5 ВСЕЛЕННЫХ -->
 <div id="universesPage" class="page">
-    <h2 style="text-align: center; margin-bottom: 32px; font-weight: 350;">🌀 5 миров, где мы порознь</h2>
+    <h2 style="text-align: center; margin-bottom: 20px; font-weight: 400;">🌀 параллельные миры без тебя</h2>
     <div class="universes-grid" id="videosGrid"></div>
-    <p style="text-align: center; margin-top: 48px; font-size: 13px; opacity: 0.6;">но ни один не стал нашим домом</p>
+    <div class="center-video-wrapper" id="centerVideoContainer"></div>
 </div>
 
-<!-- СТРАНИЦА 3: КОНВЕРТ СО СТИХОМ -->
+<!-- СТРАНИЦА 3: ЧЕРВОТОЧИНА ХОККИНГА + 3D ГАЛАКТИКА + СЧЁТЧИК -->
+<div id="hawkingPage" class="page">
+    <div class="hawking-page">
+        <div id="galaxy-container"></div>
+        <div class="wormhole-card">
+            <h2 style="font-size: 1.8rem; margin-bottom: 10px;">🕳️ ЧЕРВОТОЧИНА ВРЕМЕНИ</h2>
+            <p style="opacity: 0.8;">«Помните: смотрите на звёзды, а не себе под ноги»<br>— Стивен Хокинг</p>
+            
+            <div class="countdown-timer">
+                <h3>⏰ ДО НАШЕЙ ВСТРЕЧИ</h3>
+                <div class="timer-digits" id="timerDigits">
+                    <div class="timer-block"><div class="timer-number" id="days">0</div><div class="timer-label">дней</div></div>
+                    <div class="timer-block"><div class="timer-number" id="hours">0</div><div class="timer-label">часов</div></div>
+                    <div class="timer-block"><div class="timer-number" id="minutes">0</div><div class="timer-label">минут</div></div>
+                    <div class="timer-block"><div class="timer-number" id="seconds">0</div><div class="timer-label">секунд</div></div>
+                </div>
+                <p style="font-size: 0.75rem; margin-top: 12px;">🌟 10 июля 2026 (МСК) — мы будем вместе</p>
+            </div>
+
+            <div class="hawking-quote" id="hawkingQuote">
+                "Одна из самых больших загадок — это время. Но ещё большая загадка — как я успел полюбить тебя за одно мгновение."
+            </div>
+            <button class="time-travel-btn" id="timeTravelBtn">🌀 Отправиться в другую вселенную</button>
+            <div class="cosmic-fact" id="cosmicFact">
+                ✨ Факт: Галактики удаляются, но мы с каждым днём становимся ближе.
+            </div>
+        </div>
+        <p style="margin-top: 20px; font-size: 12px;">«Даже чёрные дыры не вечны, а наша любовь — бесконечна»</p>
+    </div>
+</div>
+
+<!-- СТРАНИЦА 4: КОНВЕРТ -->
 <div id="letterPage" class="page">
     <div class="envelope-area">
         <div class="envelope" id="envelope">
             <div class="envelope-flap"></div>
             <div class="envelope-body"></div>
-            <div class="letter">
-                <div class="poem-text" id="poemContent"></div>
-            </div>
         </div>
-        <p style="margin-top: 25px; font-size: 13px; opacity: 0.5;">нажми на конверт — откроется сердце</p>
+        <p style="margin-top: 25px; font-size: 13px;">нажми на конверт, чтобы прочитать письмо</p>
     </div>
 </div>
 
-<!-- АУДИО -->
+<!-- ПОЛНОЭКРАННОЕ ПИСЬМО -->
+<div id="fullscreenLetter" class="fullscreen-letter">
+    <button class="close-letter" id="closeLetterBtn">✕</button>
+    <div class="letter-full-content" id="poemFullContent"></div>
+</div>
+
 <audio id="globalAudio" loop preload="auto">
     <source src="https://github.com/saioha/GIFs-/raw/refs/heads/main/Sweater-Weather-The-Neighbourhood.mp3" type="audio/mpeg">
 </audio>
 
+<!-- Three.js библиотека для 3D галактики -->
+<script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.128.0/build/three.module.js"
+        }
+    }
+</script>
+
+<script type="module">
+    import * as THREE from 'three';
+
+    // ========= 3D ГАЛАКТИКА =========
+    const container = document.getElementById('galaxy-container');
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x020210);
+    
+    const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+    camera.position.set(0, 2, 8);
+    camera.lookAt(0, 0, 0);
+    
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    container.appendChild(renderer.domElement);
+    
+    // Звёздный фон (частицы)
+    const starGeometry = new THREE.BufferGeometry();
+    const starCount = 1500;
+    const starPositions = new Float32Array(starCount * 3);
+    for (let i = 0; i < starCount; i++) {
+        starPositions[i*3] = (Math.random() - 0.5) * 200;
+        starPositions[i*3+1] = (Math.random() - 0.5) * 100;
+        starPositions[i*3+2] = (Math.random() - 0.5) * 80 - 40;
+    }
+    starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+    const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.12, transparent: true, opacity: 0.7 });
+    const starsField = new THREE.Points(starGeometry, starMaterial);
+    scene.add(starsField);
+    
+    // Спиральная галактика
+    const galaxyGeometry = new THREE.BufferGeometry();
+    const particleCount = 4000;
+    const positions = new Float32Array(particleCount * 3);
+    const colors = new Float32Array(particleCount * 3);
+    
+    for (let i = 0; i < particleCount; i++) {
+        const radius = Math.random() ** 1.5 * 3.5;
+        const angle = Math.random() * Math.PI * 2;
+        const spiral = angle * 2.5;
+        const x = Math.cos(angle + spiral) * radius;
+        const z = Math.sin(angle + spiral) * radius;
+        const y = (Math.random() - 0.5) * 0.8;
+        positions[i*3] = x;
+        positions[i*3+1] = y;
+        positions[i*3+2] = z;
+        
+        const color = new THREE.Color().setHSL(0.55 + Math.random() * 0.15, 0.9, 0.5);
+        colors[i*3] = color.r;
+        colors[i*3+1] = color.g;
+        colors[i*3+2] = color.b;
+    }
+    galaxyGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    galaxyGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    const galaxyMaterial = new THREE.PointsMaterial({ size: 0.05, vertexColors: true, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending });
+    const galaxy = new THREE.Points(galaxyGeometry, galaxyMaterial);
+    scene.add(galaxy);
+    
+    // Центральное свечение (ядро)
+    const coreGeometry = new THREE.SphereGeometry(0.35, 16, 16);
+    const coreMaterial = new THREE.MeshStandardMaterial({ color: 0xffaa66, emissive: 0xff4422, emissiveIntensity: 0.8 });
+    const core = new THREE.Mesh(coreGeometry, coreMaterial);
+    scene.add(core);
+    
+    const ambientLight = new THREE.AmbientLight(0x222222);
+    scene.add(ambientLight);
+    const pointLight = new THREE.PointLight(0xffaa66, 1, 20);
+    pointLight.position.set(1, 1, 2);
+    scene.add(pointLight);
+    
+    let time = 0;
+    function animateGalaxy() {
+        requestAnimationFrame(animateGalaxy);
+        time += 0.003;
+        galaxy.rotation.y = time * 0.8;
+        starsField.rotation.y = time * 0.05;
+        starsField.rotation.x = Math.sin(time * 0.1) * 0.1;
+        core.rotation.x = time * 0.5;
+        renderer.render(scene, camera);
+    }
+    animateGalaxy();
+    
+    window.addEventListener('resize', () => {
+        const width = container.clientWidth;
+        const height = container.clientHeight;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+    });
+</script>
+
 <script>
-    // ---------- ВАШ СТИХ (полностью) ----------
-    const YOUR_POEM = `Прости за глупости, что наговорила,
+    // ========= ПОЛНЫЙ СТИХ =========
+    const FULL_POEM = `Прости за глупости, что наговорила,
 за резкость, что вышла случайно.
 Я так не думаю, правда, поверь —
 это всё было слишком отчаянно.
@@ -377,16 +614,88 @@
 Потому что всё, что у нас есть сейчас, —
 слишком живое, чтобы стать прошлым.`;
 
-    // ------ 5 ВИДЕО (ссылки) ------
-    const videosList = [
-        { title: "🌀 Вселенная разлуки", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/5F9D3EE4-6622-450D-B492-A4C40DE22DA8-ezgif.com-gif-to-mp4-converter.mp4" },
-        { title: "🌙 Вселенная ожидания", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/4F9B18C5-3104-4044-BC51-FE65244121B5-ezgif.com-gif-to-mp4-converter.mp4" },
-        { title: "⭐ Вселенная снов", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/4028BD33-1752-4F18-9C9D-8969ABD02A5C-ezgif.com-gif-to-mp4-converter.mp4" },
-        { title: "🌌 Вселенная тишины", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/2691FB63-EDCE-4FEA-9FF6-55E896B92298-ezgif.com-gif-to-mp4-converter.mp4" },
-        { title: "💫 Вселенная обещаний", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/07922ED7-1077-4810-874E-B26A53D5CE92-ezgif.com-gif-to-mp4-converter.mp4" }
+    // ========= 5 ВИДЕО + КИНОЦИТАТЫ =========
+    const videosData = [
+        { title: "10 причин моей ненависти к тебе", quote: "«Я ненавижу тебя настолько, что готова любить вечность»", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/5F9D3EE4-6622-450D-B492-A4C40DE22DA8-ezgif.com-gif-to-mp4-converter.mp4" },
+        { title: "Из 13 в 30", quote: "«Тридцать — это не старость, это время найти настоящую любовь»", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/4F9B18C5-3104-4044-BC51-FE65244121B5-ezgif.com-gif-to-mp4-converter.mp4" },
+        { title: "Вселенная Стивена Хокинга", quote: "«Мы всего лишь частица во Вселенной, но для друг друга — целый мир»", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/4028BD33-1752-4F18-9C9D-8969ABD02A5C-ezgif.com-gif-to-mp4-converter.mp4" },
+        { title: "До встречи с тобой", quote: "«Ты единственный, кто заставил меня чувствовать себя живым»", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/2691FB63-EDCE-4FEA-9FF6-55E896B92298-ezgif.com-gif-to-mp4-converter.mp4" },
+        { title: "Дневник памяти", quote: "«Любовь — это когда мы вместе, даже если ничего не помним»", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/07922ED7-1077-4810-874E-B26A53D5CE92-ezgif.com-gif-to-mp4-converter.mp4" }
     ];
 
-    // --- Элементы ---
+    // отрисовка 4 карточек в грид, а 5-ю в центр
+    const gridContainer = document.getElementById('videosGrid');
+    const centerContainer = document.getElementById('centerVideoContainer');
+    
+    videosData.forEach((video, idx) => {
+        if (idx < 4) {
+            const card = document.createElement('div');
+            card.className = 'universe-card';
+            const vid = document.createElement('video');
+            vid.src = video.src;
+            vid.loop = true;
+            vid.muted = true;
+            vid.autoplay = true;
+            vid.playsInline = true;
+            vid.addEventListener('loadeddata', () => vid.play().catch(e=>console.log));
+            const titleSpan = document.createElement('div');
+            titleSpan.className = 'universe-title';
+            titleSpan.innerText = video.title;
+            const quoteSpan = document.createElement('div');
+            quoteSpan.className = 'movie-quote';
+            quoteSpan.innerText = video.quote;
+            card.appendChild(vid);
+            card.appendChild(titleSpan);
+            card.appendChild(quoteSpan);
+            gridContainer.appendChild(card);
+        } else if (idx === 4) {
+            const centerCard = document.createElement('div');
+            centerCard.className = 'center-universe-card';
+            const vidCenter = document.createElement('video');
+            vidCenter.src = video.src;
+            vidCenter.loop = true;
+            vidCenter.muted = true;
+            vidCenter.autoplay = true;
+            vidCenter.playsInline = true;
+            vidCenter.style.borderRadius = "32px";
+            vidCenter.addEventListener('loadeddata', () => vidCenter.play().catch(e=>console.log));
+            const quoteDiv = document.createElement('div');
+            quoteDiv.className = 'center-quote';
+            quoteDiv.innerText = `✨ ${video.title} ✨ — ${video.quote}`;
+            centerCard.appendChild(vidCenter);
+            centerCard.appendChild(quoteDiv);
+            centerContainer.appendChild(centerCard);
+        }
+    });
+
+    // ========= СЧЁТЧИК ДО ВСТРЕЧИ (10 июля 2026, МСК) =========
+    function updateCountdown() {
+        const targetDate = new Date(2026, 6, 10, 0, 0, 0); // 10 июля 2026, 00:00 МСК
+        const now = new Date();
+        const diff = targetDate - now;
+        
+        if (diff <= 0) {
+            document.getElementById('days').innerText = '0';
+            document.getElementById('hours').innerText = '0';
+            document.getElementById('minutes').innerText = '0';
+            document.getElementById('seconds').innerText = '0';
+            return;
+        }
+        
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        
+        document.getElementById('days').innerText = days;
+        document.getElementById('hours').innerText = hours;
+        document.getElementById('minutes').innerText = minutes;
+        document.getElementById('seconds').innerText = seconds;
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // ========= АУДИОПЛЕЕР, ВИНИЛ, ЛАПКА =========
     const audio = document.getElementById('globalAudio');
     audio.load();
     const playPausePaw = document.getElementById('playPausePaw');
@@ -400,19 +709,13 @@
             playPauseText.innerText = '▶';
             bigVinyl.classList.remove('playing');
         } else {
-            audio.play().catch(e => console.log("автоплей заблокирован, но работает по клику"));
+            audio.play().catch(e=>console.log);
             playPauseText.innerText = '⏸';
             bigVinyl.classList.add('playing');
         }
         isPlaying = !isPlaying;
     }
-
-    playPausePaw.addEventListener('click', (e) => {
-        e.stopPropagation();
-        toggleMusic();
-    });
-
-    // автозапуск при первом касании
+    playPausePaw.addEventListener('click', (e) => { e.stopPropagation(); toggleMusic(); });
     document.body.addEventListener('click', function initOnce() {
         if (!isPlaying) {
             audio.play().then(() => {
@@ -423,14 +726,14 @@
         }
         document.body.removeEventListener('click', initOnce);
     }, { once: true });
-
     audio.addEventListener('play', () => { isPlaying = true; playPauseText.innerText = '⏸'; bigVinyl.classList.add('playing'); });
     audio.addEventListener('pause', () => { isPlaying = false; playPauseText.innerText = '▶'; bigVinyl.classList.remove('playing'); });
 
-    // --- НАВИГАЦИЯ МЕЖДУ СТРАНИЦАМИ (музыка не прерывается)---
+    // ========= НАВИГАЦИЯ =========
     const pages = {
         vinyl: document.getElementById('vinylPage'),
         universes: document.getElementById('universesPage'),
+        hawking: document.getElementById('hawkingPage'),
         letter: document.getElementById('letterPage')
     };
     const navBtns = document.querySelectorAll('.nav-btn');
@@ -442,115 +745,62 @@
             else btn.classList.remove('active');
         });
     }
-    navBtns.forEach(btn => {
-        btn.addEventListener('click', () => showPage(btn.dataset.page));
-    });
+    navBtns.forEach(btn => btn.addEventListener('click', () => showPage(btn.dataset.page)));
 
-    // --- ОТРИСОВКА 5 ВИДЕО ---
-    const grid = document.getElementById('videosGrid');
-    videosList.forEach(v => {
-        const card = document.createElement('div');
-        card.className = 'universe-card';
-        const video = document.createElement('video');
-        video.src = v.src;
-        video.loop = true;
-        video.muted = true;
-        video.autoplay = true;
-        video.playsInline = true;
-        video.setAttribute('playsinline', '');
-        video.addEventListener('loadeddata', () => { video.play().catch(e=>console.log); });
-        const titleSpan = document.createElement('div');
-        titleSpan.className = 'universe-title';
-        titleSpan.innerText = v.title;
-        card.appendChild(video);
-        card.appendChild(titleSpan);
-        grid.appendChild(card);
-    });
-
-    // --- КОНВЕРТ И СТИХ ---
+    // ========= ПОЛНОЭКРАННОЕ ПИСЬМО =========
     const envelope = document.getElementById('envelope');
-    const poemDiv = document.getElementById('poemContent');
-    poemDiv.innerText = YOUR_POEM;
+    const fullscreenDiv = document.getElementById('fullscreenLetter');
+    const poemFull = document.getElementById('poemFullContent');
+    poemFull.innerText = FULL_POEM;
+    const closeLetterBtn = document.getElementById('closeLetterBtn');
+
     envelope.addEventListener('click', () => {
-        envelope.classList.toggle('open');
+        fullscreenDiv.classList.add('show');
+    });
+    closeLetterBtn.addEventListener('click', () => {
+        fullscreenDiv.classList.remove('show');
+    });
+    fullscreenDiv.addEventListener('click', (e) => {
+        if(e.target === fullscreenDiv) fullscreenDiv.classList.remove('show');
     });
 
-    // ========== ЭФФЕКТ ПАДАЮЩИХ ЗВЁЗД (Canvas) ==========
+    // ========= СТРАНИЦА ХОККИНГА: ИНТЕРАКТИВ =========
+    const quotesHawking = [
+        "«Мы всего лишь продвинутые обезьяны на маленькой планете. Но мы способны понять Вселенную. Это делает нас особенными»",
+        "«Помните: смотрите на звёзды, а не себе под ноги. Постарайтесь осмыслить то, что вы видите, и задайтесь вопросом о том, что заставляет Вселенную существовать»",
+        "«Неважно, как тяжела жизнь, всегда есть то, что вы можете сделать и в чём преуспеть. Пока есть жизнь — есть надежда»",
+        "«Ты и я — мы связаны сильнее гравитации. Даже чёрная дыра не способна разорвать эту связь»",
+        "«Время относительно. Для нас минута разлуки длится вечность, но секунда встречи — как миллион лет счастья»"
+    ];
+    const facts = [
+        "✨ Факт: Чёрные дыры излучают — это открыл Хокинг. А ты излучаешь тепло, которое согревает меня.",
+        "🌌 Время относительно: для нас минута разлуки длится вечность, но секунда встречи — как миллион лет счастья.",
+        "🕳️ Через червоточину мы найдём ту вселенную, где мы уже вместе, обнявшись, смотрим на звёзды.",
+        "⭐ Галактики разлетаются, но наша любовь — единственная сила, которая притягивает сильнее гравитации."
+    ];
+    let factIndex = 0;
+    const hawkingQuoteDiv = document.getElementById('hawkingQuote');
+    const cosmicFactDiv = document.getElementById('cosmicFact');
+    const timeBtn = document.getElementById('timeTravelBtn');
+    let quoteIndex = 0;
+    timeBtn.addEventListener('click', () => {
+        quoteIndex = (quoteIndex + 1) % quotesHawking.length;
+        hawkingQuoteDiv.innerText = quotesHawking[quoteIndex];
+        factIndex = (factIndex + 1) % facts.length;
+        cosmicFactDiv.innerText = facts[factIndex];
+    });
+
+    // ========= ПАДАЮЩИЕ ЗВЕЗДЫ (Canvas 2D) =========
     const canvas = document.getElementById('stars-canvas');
     let ctx = canvas.getContext('2d');
     let width, height;
     let stars = [];
-    const STAR_COUNT = 80;
-
-    function resizeCanvas() {
-        width = window.innerWidth;
-        height = window.innerHeight;
-        canvas.width = width;
-        canvas.height = height;
-    }
-
-    function initStars() {
-        stars = [];
-        for (let i = 0; i < STAR_COUNT; i++) {
-            stars.push({
-                x: Math.random() * width,
-                y: Math.random() * height,
-                radius: Math.random() * 2.5 + 1.2,
-                alpha: Math.random() * 0.6 + 0.3,
-                speedY: Math.random() * 2.5 + 1.2,
-                speedX: (Math.random() - 0.5) * 0.5,
-                trail: []
-            });
-        }
-    }
-
-    function drawStars() {
-        if (!ctx) return;
-        ctx.clearRect(0, 0, width, height);
-        ctx.shadowBlur = 0;
-        for (let s of stars) {
-            ctx.beginPath();
-            ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 240, 180, ${s.alpha})`;
-            ctx.fill();
-            // легкое свечение
-            ctx.beginPath();
-            ctx.arc(s.x - 1, s.y - 1, s.radius * 0.6, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 200, 100, 0.3)`;
-            ctx.fill();
-        }
-    }
-
-    function updateStars() {
-        for (let s of stars) {
-            s.x += s.speedX;
-            s.y += s.speedY;
-            if (s.y > height + 20) {
-                s.y = -20;
-                s.x = Math.random() * width;
-                s.alpha = Math.random() * 0.6 + 0.3;
-            }
-            if (s.x > width + 30) s.x = -30;
-            if (s.x < -30) s.x = width + 30;
-        }
-        drawStars();
-        requestAnimationFrame(updateStars);
-    }
-
-    window.addEventListener('resize', () => {
-        resizeCanvas();
-        initStars();
-    });
-    resizeCanvas();
-    initStars();
-    updateStars();
-
-    // небольшая защита от бага с аудио на айфонах
-    document.addEventListener('touchstart', function() {
-        if (audio.paused && !isPlaying) {
-            audio.play().catch(e=>{});
-        }
-    }, { once: true });
+    function resizeCanvas() { width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height; }
+    function initStars() { stars = []; for(let i=0;i<90;i++) { stars.push({ x: Math.random()*width, y: Math.random()*height, radius: Math.random()*2.2+1, alpha: Math.random()*0.6+0.3, speedY: Math.random()*2.3+1, speedX: (Math.random()-0.5)*0.4 }); } }
+    function drawStars() { ctx.clearRect(0,0,width,height); stars.forEach(s=>{ ctx.beginPath(); ctx.arc(s.x,s.y,s.radius,0,Math.PI*2); ctx.fillStyle = `rgba(255,235,160,${s.alpha})`; ctx.fill(); }); }
+    function updateStars() { stars.forEach(s=>{ s.y+=s.speedY; s.x+=s.speedX; if(s.y>height+30) { s.y=-20; s.x=Math.random()*width; } if(s.x>width+40) s.x=-40; if(s.x<-40) s.x=width+40; }); drawStars(); requestAnimationFrame(updateStars); }
+    window.addEventListener('resize', ()=>{ resizeCanvas(); initStars(); });
+    resizeCanvas(); initStars(); updateStars();
 </script>
 </body>
 </html>
