@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <title>Встретимся дома ✨</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #0a0a2a 0%, #0a0a1a 100%);
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Canvas для падающих звёзд */
+        #stars-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Глобальный плеер (лапка) */
+        .global-player {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(16px);
+            border-radius: 60px;
+            padding: 8px 16px 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid rgba(255,255,255,0.25);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .global-player:hover { background: rgba(0,0,0,0.85); transform: scale(1.02);}
+        .cat-paw-btn {
+            width: 44px;
+            height: 44px;
+            background-image: url('https://github.com/saioha/GIFs-/raw/refs/heads/main/IMG_4774.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));
+            cursor: pointer;
+            transition: 0.1s transform;
+        }
+        .cat-paw-btn:active { transform: scale(0.92); }
+        .song-name { font-size: 13px; font-weight: 400; letter-spacing: 0.3px; background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 40px; }
+        .play-pause-text { font-size: 20px; font-weight: 600; min-width: 32px; text-align: center; }
+
+        /* Навигация */
+        .nav-links {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 16px;
+            z-index: 999;
+            background: rgba(10,10,30,0.7);
+            backdrop-filter: blur(20px);
+            padding: 10px 24px;
+            border-radius: 60px;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .nav-btn {
+            background: none;
+            border: none;
+            color: #eee;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 6px 18px;
+            border-radius: 40px;
+            transition: 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        .nav-btn.active { background: rgba(255,215,150,0.25); color: #ffecb3; box-shadow: 0 0 10px rgba(255,200,100,0.3); }
+        .nav-btn:hover { background: rgba(255,255,255,0.1); }
+
+        /* Страницы */
+        .page {
+            display: none;
+            padding: 110px 20px 90px;
+            min-height: 100vh;
+            position: relative;
+            z-index: 2;
+            animation: fadePage 0.4s ease;
+        }
+        .page.active { display: block; }
+        @keyframes fadePage { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: translateY(0);} }
+
+        /* Винил главная */
+        .vinyl-hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+            text-align: center;
+        }
+        .vinyl-record-img {
+            width: 280px;
+            height: 280px;
+            background-image: url('https://github.com/saioha/GIFs-/blob/72b2292f5d07e1475aa474ba3e18fd9bf2d63d29/%D0%91%D0%B5%D0%B7%20%D0%BD%D0%B0%D0%B7%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F64_20260420170959.png?raw=1');
+            background-size: cover;
+            background-position: center;
+            border-radius: 50%;
+            box-shadow: 0 25px 40px rgba(0,0,0,0.5), 0 0 0 6px rgba(255,255,200,0.2);
+            animation: spinVinyl 8s linear infinite;
+            animation-play-state: paused;
+            margin-bottom: 30px;
+        }
+        .vinyl-record-img.playing { animation-play-state: running; }
+        @keyframes spinVinyl { 100% { transform: rotate(360deg); } }
+        .greeting { font-size: 2.2rem; font-family: 'Playfair Display', serif; margin: 20px 0 10px; background: linear-gradient(135deg, #ffe6c7, #ffb7c5); -webkit-background-clip: text; background-clip: text; color: transparent;}
+        .cat-gif-bottom {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 80px;
+            height: 80px;
+            z-index: 100;
+            pointer-events: none;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+        }
+        .cat-gif-bottom video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 30px;
+        }
+
+        /* Вселенные грид */
+        .universes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 28px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        .universe-card {
+            background: rgba(25,25,55,0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 36px;
+            padding: 14px;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: 0.25s ease;
+        }
+        .universe-card video {
+            width: 100%;
+            border-radius: 28px;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            background: #000;
+        }
+        .universe-title { margin-top: 14px; font-weight: 500; text-align: center; font-size: 0.9rem; letter-spacing: -0.2px; }
+
+        /* Конверт со стихом */
+        .envelope-area {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 70vh;
+            flex-direction: column;
+        }
+        .envelope {
+            width: 340px;
+            height: 230px;
+            background: #e3c9a0;
+            position: relative;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+            box-shadow: 0 20px 30px -8px black;
+            margin-bottom: 20px;
+        }
+        .envelope:hover { transform: translateY(-6px); }
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: #d4b17c;
+            clip-path: polygon(0 0, 50% 48%, 100% 0);
+            transition: transform 0.5s ease;
+            transform-origin: top;
+            z-index: 2;
+        }
+        .envelope.open .envelope-flap { transform: rotateX(180deg); }
+        .envelope-body { position: absolute; bottom: 0; width: 100%; height: 72%; background: #f7e5c2; border-radius: 0 0 12px 12px; }
+        .letter {
+            position: absolute;
+            bottom: 20px;
+            left: 18px;
+            right: 18px;
+            background: #fffef7;
+            padding: 20px;
+            border-radius: 20px;
+            color: #2c2b28;
+            font-family: 'Playfair Display', serif;
+            font-size: 14px;
+            line-height: 1.5;
+            opacity: 0;
+            transform: translateY(25px);
+            transition: 0.45s;
+            pointer-events: none;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.2);
+            max-height: 65vh;
+            overflow-y: auto;
+            text-align: left;
+        }
+        .envelope.open .letter { opacity: 1; transform: translateY(-10px); pointer-events: auto; }
+        .poem-text { white-space: pre-line; font-style: normal; font-weight: 400; }
+
+        @media (max-width: 700px) {
+            .vinyl-record-img { width: 220px; height: 220px; }
+            .greeting { font-size: 1.7rem; }
+            .nav-links { gap: 8px; padding: 8px 18px; top: 12px; }
+            .nav-btn { font-size: 12px; padding: 4px 14px; }
+            .universe-card { padding: 10px; }
+            .envelope { width: 280px; height: 200px; }
+            .letter { font-size: 12px; padding: 16px; }
+        }
+
+        /* Адаптация под айфоны с челкой */
+        @supports (padding-top: constant(safe-area-inset-top)) {
+            .nav-links { top: max(20px, constant(safe-area-inset-top)); }
+            .page { padding-top: max(110px, constant(safe-area-inset-top) + 20px); }
+        }
+        @supports (padding-top: env(safe-area-inset-top)) {
+            .nav-links { top: max(20px, env(safe-area-inset-top)); }
+            .page { padding-top: max(110px, env(safe-area-inset-top) + 20px); }
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="stars-canvas"></canvas>
+
+<!-- Глобальная кнопка-лапка + плеер -->
+<div class="global-player" id="globalPlayer">
+    <div class="cat-paw-btn" id="playPausePaw"></div>
+    <span class="song-name">🧶 sweater weather</span>
+    <span class="play-pause-text" id="playPauseText">▶</span>
+</div>
+
+<div class="nav-links">
+    <button class="nav-btn" data-page="vinyl">💿 Винил</button>
+    <button class="nav-btn" data-page="universes">🌌 Разные вселенные</button>
+    <button class="nav-btn" data-page="letter">✉️ Письмо</button>
+</div>
+
+<!-- гифка котика снизу (всегда видна) -->
+<div class="cat-gif-bottom">
+    <video autoplay loop muted playsinline>
+        <source src="https://github.com/saioha/GIFs-/raw/refs/heads/main/IMG_4769-ezgif.com-gif-to-mp4-converter.mp4" type="video/mp4">
+    </video>
+</div>
+
+<!-- СТРАНИЦА 1: ВИНИЛ -->
+<div id="vinylPage" class="page active">
+    <div class="vinyl-hero">
+        <div class="vinyl-record-img" id="bigVinylRecord"></div>
+        <h1 class="greeting">✨ Встретимся дома ✨</h1>
+        <p style="opacity: 0.7; margin-top: 10px;">наша пластинка играет для нас</p>
+    </div>
+</div>
+
+<!-- СТРАНИЦА 2: 5 ВСЕЛЕННЫХ (видео) -->
+<div id="universesPage" class="page">
+    <h2 style="text-align: center; margin-bottom: 32px; font-weight: 350;">🌀 5 миров, где мы порознь</h2>
+    <div class="universes-grid" id="videosGrid"></div>
+    <p style="text-align: center; margin-top: 48px; font-size: 13px; opacity: 0.6;">но ни один не стал нашим домом</p>
+</div>
+
+<!-- СТРАНИЦА 3: КОНВЕРТ СО СТИХОМ -->
+<div id="letterPage" class="page">
+    <div class="envelope-area">
+        <div class="envelope" id="envelope">
+            <div class="envelope-flap"></div>
+            <div class="envelope-body"></div>
+            <div class="letter">
+                <div class="poem-text" id="poemContent"></div>
+            </div>
+        </div>
+        <p style="margin-top: 25px; font-size: 13px; opacity: 0.5;">нажми на конверт — откроется сердце</p>
+    </div>
+</div>
+
+<!-- АУДИО -->
+<audio id="globalAudio" loop preload="auto">
+    <source src="https://github.com/saioha/GIFs-/raw/refs/heads/main/Sweater-Weather-The-Neighbourhood.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+    // ---------- ВАШ СТИХ (полностью) ----------
+    const YOUR_POEM = `Прости за глупости, что наговорила,
+за резкость, что вышла случайно.
+Я так не думаю, правда, поверь —
+это всё было слишком отчаянно.
+
+Давай построим вместе жизнь —
+как в тех фильмах, что мы смотрели
+ночами. Когда спать хотелось,
+но мы этого не замечали.
+
+И если вселенные правда бесконечны,
+то мы в них счастливы, конечно.
+Пусть мы не Элисон и Ной,
+но любим с той же глубиной.
+
+Сейчас между нами часы и пути,
+разные окна, разные дни.
+Но скоро жизнь станет другой.
+Мы справимся с этим, пройдя через боль.
+
+Я помню, как мы познакомились в мае.
+И допросы как на первом канале:
+«Что ешь? Чем дышишь? Как спишь?»
+Мы этим пытались заполнить тишь.
+
+С тех пор — бесконечные сообщения,
+иногда слёзы и звонки до утра.
+Я помню твой шёпот — моё спасение
+и то, как ты молчишь, когда спать пора.
+
+Ты знаешь, во сколько я просыпаюсь,
+когда у меня плохое настроение,
+как я могу замолчать на час,
+а потом писать без объяснения.
+
+У нас нет общих улиц и мест,
+нет фотографий, как у других.
+Только планы, которые мы бережём,
+и разговоры — одни на двоих.
+
+И это, наверное, самое важное —
+не то, что мы где-то рядом,
+а то, что даже на расстоянии
+мы смотрим друг на друга влюблённым взглядом.
+
+Я иногда думаю: странно —
+так скучать по тому, кого не обнимала.
+Но это пустяк, ведь наша любовь сильнее
+любого экрана.
+
+Я представляю нашу первую встречу —
+без кино, без заготовленных слов.
+Я просто подойду и тихо скажу:
+«Люблю…». И это будет любовь.
+
+Да, мне не нужны идеальные фразы!
+Я просто хочу написать тебе: «Встретимся дома».
+Потому что всё, что у нас есть сейчас, —
+слишком живое, чтобы стать прошлым.`;
+
+    // ------ 5 ВИДЕО (ссылки) ------
+    const videosList = [
+        { title: "🌀 Вселенная разлуки", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/5F9D3EE4-6622-450D-B492-A4C40DE22DA8-ezgif.com-gif-to-mp4-converter.mp4" },
+        { title: "🌙 Вселенная ожидания", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/4F9B18C5-3104-4044-BC51-FE65244121B5-ezgif.com-gif-to-mp4-converter.mp4" },
+        { title: "⭐ Вселенная снов", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/4028BD33-1752-4F18-9C9D-8969ABD02A5C-ezgif.com-gif-to-mp4-converter.mp4" },
+        { title: "🌌 Вселенная тишины", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/2691FB63-EDCE-4FEA-9FF6-55E896B92298-ezgif.com-gif-to-mp4-converter.mp4" },
+        { title: "💫 Вселенная обещаний", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/07922ED7-1077-4810-874E-B26A53D5CE92-ezgif.com-gif-to-mp4-converter.mp4" }
+    ];
+
+    // --- Элементы ---
+    const audio = document.getElementById('globalAudio');
+    audio.load();
+    const playPausePaw = document.getElementById('playPausePaw');
+    const playPauseText = document.getElementById('playPauseText');
+    const bigVinyl = document.getElementById('bigVinylRecord');
+    let isPlaying = false;
+
+    function toggleMusic() {
+        if (isPlaying) {
+            audio.pause();
+            playPauseText.innerText = '▶';
+            bigVinyl.classList.remove('playing');
+        } else {
+            audio.play().catch(e => console.log("автоплей заблокирован, но работает по клику"));
+            playPauseText.innerText = '⏸';
+            bigVinyl.classList.add('playing');
+        }
+        isPlaying = !isPlaying;
+    }
+
+    playPausePaw.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleMusic();
+    });
+
+    // автозапуск при первом касании
+    document.body.addEventListener('click', function initOnce() {
+        if (!isPlaying) {
+            audio.play().then(() => {
+                isPlaying = true;
+                playPauseText.innerText = '⏸';
+                bigVinyl.classList.add('playing');
+            }).catch(()=>{});
+        }
+        document.body.removeEventListener('click', initOnce);
+    }, { once: true });
+
+    audio.addEventListener('play', () => { isPlaying = true; playPauseText.innerText = '⏸'; bigVinyl.classList.add('playing'); });
+    audio.addEventListener('pause', () => { isPlaying = false; playPauseText.innerText = '▶'; bigVinyl.classList.remove('playing'); });
+
+    // --- НАВИГАЦИЯ МЕЖДУ СТРАНИЦАМИ (музыка не прерывается)---
+    const pages = {
+        vinyl: document.getElementById('vinylPage'),
+        universes: document.getElementById('universesPage'),
+        letter: document.getElementById('letterPage')
+    };
+    const navBtns = document.querySelectorAll('.nav-btn');
+    function showPage(pageId) {
+        Object.keys(pages).forEach(id => pages[id].classList.remove('active'));
+        pages[pageId].classList.add('active');
+        navBtns.forEach(btn => {
+            if(btn.dataset.page === pageId) btn.classList.add('active');
+            else btn.classList.remove('active');
+        });
+    }
+    navBtns.forEach(btn => {
+        btn.addEventListener('click', () => showPage(btn.dataset.page));
+    });
+
+    // --- ОТРИСОВКА 5 ВИДЕО ---
+    const grid = document.getElementById('videosGrid');
+    videosList.forEach(v => {
+        const card = document.createElement('div');
+        card.className = 'universe-card';
+        const video = document.createElement('video');
+        video.src = v.src;
+        video.loop = true;
+        video.muted = true;
+        video.autoplay = true;
+        video.playsInline = true;
+        video.setAttribute('playsinline', '');
+        video.addEventListener('loadeddata', () => { video.play().catch(e=>console.log); });
+        const titleSpan = document.createElement('div');
+        titleSpan.className = 'universe-title';
+        titleSpan.innerText = v.title;
+        card.appendChild(video);
+        card.appendChild(titleSpan);
+        grid.appendChild(card);
+    });
+
+    // --- КОНВЕРТ И СТИХ ---
+    const envelope = document.getElementById('envelope');
+    const poemDiv = document.getElementById('poemContent');
+    poemDiv.innerText = YOUR_POEM;
+    envelope.addEventListener('click', () => {
+        envelope.classList.toggle('open');
+    });
+
+    // ========== ЭФФЕКТ ПАДАЮЩИХ ЗВЁЗД (Canvas) ==========
+    const canvas = document.getElementById('stars-canvas');
+    let ctx = canvas.getContext('2d');
+    let width, height;
+    let stars = [];
+    const STAR_COUNT = 80;
+
+    function resizeCanvas() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+    }
+
+    function initStars() {
+        stars = [];
+        for (let i = 0; i < STAR_COUNT; i++) {
+            stars.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                radius: Math.random() * 2.5 + 1.2,
+                alpha: Math.random() * 0.6 + 0.3,
+                speedY: Math.random() * 2.5 + 1.2,
+                speedX: (Math.random() - 0.5) * 0.5,
+                trail: []
+            });
+        }
+    }
+
+    function drawStars() {
+        if (!ctx) return;
+        ctx.clearRect(0, 0, width, height);
+        ctx.shadowBlur = 0;
+        for (let s of stars) {
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 240, 180, ${s.alpha})`;
+            ctx.fill();
+            // легкое свечение
+            ctx.beginPath();
+            ctx.arc(s.x - 1, s.y - 1, s.radius * 0.6, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 200, 100, 0.3)`;
+            ctx.fill();
+        }
+    }
+
+    function updateStars() {
+        for (let s of stars) {
+            s.x += s.speedX;
+            s.y += s.speedY;
+            if (s.y > height + 20) {
+                s.y = -20;
+                s.x = Math.random() * width;
+                s.alpha = Math.random() * 0.6 + 0.3;
+            }
+            if (s.x > width + 30) s.x = -30;
+            if (s.x < -30) s.x = width + 30;
+        }
+        drawStars();
+        requestAnimationFrame(updateStars);
+    }
+
+    window.addEventListener('resize', () => {
+        resizeCanvas();
+        initStars();
+    });
+    resizeCanvas();
+    initStars();
+    updateStars();
+
+    // небольшая защита от бага с аудио на айфонах
+    document.addEventListener('touchstart', function() {
+        if (audio.paused && !isPlaying) {
+            audio.play().catch(e=>{});
+        }
+    }, { once: true });
+</script>
+</body>
+</html>
