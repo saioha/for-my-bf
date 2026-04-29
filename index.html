@@ -393,7 +393,7 @@
 </div>
 
 <div id="universesPage" class="page">
-    <h2 style="text-align: center; margin-bottom: 20px; font-weight: 400;">🌀 параллельные миры без тебя</h2>
+    <h2 style="text-align: center; margin-bottom: 20px; font-weight: 400;">🌀 мы в разных вселенных</h2>
     <div class="universes-grid" id="videosGrid"></div>
     <div class="center-video-wrapper" id="centerVideoContainer"></div>
 </div>
@@ -417,7 +417,7 @@
             </div>
 
             <div class="hawking-quote" id="hawkingQuote">
-                "Одна из самых больших загадок — это время. Но ещё большая загадка — как я успел полюбить тебя за одно мгновение."
+                "Одна из самых больших загадок — это время. Но ещё большая загадка — как я успела полюбить тебя за одно мгновение."
             </div>
             <button class="time-travel-btn" id="timeTravelBtn">🌀 Отправиться в другую вселенную</button>
             <div class="cosmic-fact" id="cosmicFact">
@@ -513,31 +513,32 @@
     const galaxy = new THREE.Points(galaxyGeometry, galaxyMaterial);
     scene.add(galaxy);
     
-    // ЯДРО В ВИДЕ СЕРДЦА!
-    const heartShape = new THREE.Shape();
-    heartShape.moveTo(0, 0.25);
-    heartShape.bezierCurveTo(0, 0.25, 0, 0, 0.15, 0);
-    heartShape.bezierCurveTo(0.3, 0, 0.35, 0.25, 0.2, 0.4);
-    heartShape.bezierCurveTo(0.1, 0.5, 0, 0.6, 0, 0.7);
-    heartShape.bezierCurveTo(0, 0.6, -0.1, 0.5, -0.2, 0.4);
-    heartShape.bezierCurveTo(-0.35, 0.25, -0.3, 0, -0.15, 0);
-    heartShape.bezierCurveTo(0, 0, 0, 0.25, 0, 0.25);
-    
-    const heartGeometry = new THREE.ExtrudeGeometry(heartShape, {
-        depth: 0.1,
-        bevelEnabled: true,
-        bevelSegments: 2,
-        bevelThickness: 0.05,
-        bevelSize: 0.05
-    });
-    heartGeometry.computeBoundingBox();
-    heartGeometry.center();
-    heartGeometry.scale(0.4, 0.4, 0.2);
-    
-    const heartMaterial = new THREE.MeshStandardMaterial({ color: 0xff3366, emissive: 0xff1144, emissiveIntensity: 0.9, metalness: 0.3, roughness: 0.2 });
-    const heartCore = new THREE.Mesh(heartGeometry, heartMaterial);
-    heartCore.position.set(0, 0, 0);
-    scene.add(heartCore);
+    // ЯДРО В ВИДЕ СЕРДЦА (исправленное)
+const heartShape = new THREE.Shape();
+heartShape.moveTo(0, -0.25);  // Начинаем снизу
+heartShape.bezierCurveTo(0, -0.25, 0, 0, 0.15, 0);
+heartShape.bezierCurveTo(0.3, 0, 0.35, -0.25, 0.2, -0.4);
+heartShape.bezierCurveTo(0.1, -0.5, 0, -0.6, 0, -0.7);
+heartShape.bezierCurveTo(0, -0.6, -0.1, -0.5, -0.2, -0.4);
+heartShape.bezierCurveTo(-0.35, -0.25, -0.3, 0, -0.15, 0);
+heartShape.bezierCurveTo(0, 0, 0, -0.25, 0, -0.25);
+
+const heartGeometry = new THREE.ExtrudeGeometry(heartShape, {
+    depth: 0.1,
+    bevelEnabled: true,
+    bevelSegments: 2,
+    bevelThickness: 0.05,
+    bevelSize: 0.05
+});
+heartGeometry.computeBoundingBox();
+heartGeometry.center();
+heartGeometry.scale(0.4, 0.4, 0.2);
+
+const heartMaterial = new THREE.MeshStandardMaterial({ color: 0xff3366, emissive: 0xff1144, emissiveIntensity: 0.9, metalness: 0.3, roughness: 0.2 });
+const heartCore = new THREE.Mesh(heartGeometry, heartMaterial);
+heartCore.position.set(0, 0, 0);
+scene.add(heartCore);
+ 
     
     // Свечение вокруг сердца
     const glowGeometry = new THREE.SphereGeometry(0.5, 16, 16);
@@ -642,7 +643,7 @@
     // ВИДЕО — заменил третье видео (Вселенная Стивена Хокинга)
     const videosData = [
         { title: "10 причин моей ненависти к тебе", quote: "«Я ненавижу тебя настолько, что готова любить вечность»", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/5F9D3EE4-6622-450D-B492-A4C40DE22DA8-ezgif.com-gif-to-mp4-converter.mp4" },
-        { title: "Из 13 в 30", quote: "«Тридцать — это не старость, это время найти настоящую любовь»", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/4F9B18C5-3104-4044-BC51-FE65244121B5-ezgif.com-gif-to-mp4-converter.mp4" },
+        { title: "Из 13 в 30", quote: "«Тридцать — это не старость, это время быть счастливым со своей любовью»", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/4F9B18C5-3104-4044-BC51-FE65244121B5-ezgif.com-gif-to-mp4-converter.mp4" },
         { title: "Вселенная Стивена Хокинга", quote: "«Мы всего лишь частица во Вселенной, но для друг друга — целый мир»", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/C3EB9465-CE10-4380-8EDF-B1A5E04A4D47.mp4" },  // НОВОЕ ВИДЕО
         { title: "До встречи с тобой", quote: "«Ты единственный, кто заставил меня чувствовать себя живым»", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/2691FB63-EDCE-4FEA-9FF6-55E896B92298-ezgif.com-gif-to-mp4-converter.mp4" },
         { title: "Дневник памяти", quote: "«Любовь — это когда мы вместе, даже если ничего не помним»", src: "https://github.com/saioha/GIFs-/raw/refs/heads/main/07922ED7-1077-4810-874E-B26A53D5CE92-ezgif.com-gif-to-mp4-converter.mp4" }
